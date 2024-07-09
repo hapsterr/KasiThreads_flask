@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+</head>
+<body>
+    <div>
+        <h1> About KasiThreads</h1>
+        <form >
+            <input type="text" id="username" name="username" placeholder="Username" required><br>
+            <input type="email" id="email" name="email" placeholder="Email" required><br>
+            <input type="password" id="password" name="password" placeholder="Password" required><br>
+            <input type="password" id="password2" name="password2" placeholder="Repeat Password" required><br>
+            <button type="submit">Register</button>
+        </form>
+        <div>Already have an account? <a href="{{url_for('account')}}">Login</a></div>
+    </div>
+</body>
+</html>

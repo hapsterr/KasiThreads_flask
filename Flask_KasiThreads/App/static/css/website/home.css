@@ -1,0 +1,195 @@
+.home_photos{
+    height: 95vh;
+    display: flex;
+    flex-direction: row;
+    margin: 0px 1%;
+}
+.home_photos .firstphoto h3{
+    font-size: 45px;
+    color: white;
+    padding-left: 5%;
+    padding-top: 0px;
+    position: relative;
+    top: 50px;
+}
+.home_photos .firstphoto{
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 91vh;
+    width: 55%;
+    position: relative;
+    right: 44%;
+    top: 10px;
+}
+#secondthird{
+    height: 90vh;
+    width: 44%;
+    position: relative;
+    left: 56%;
+    bottom: 10px;
+}
+.secondphoto{
+    background-size: cover;
+    height: 44vh;
+}
+.thirdphoto{
+    background-size: cover;
+    height: 44.5vh;
+    position: relative;
+    
+}
+.suggestions h2{
+    font-family: "Poppins", sans-serif;
+    font-weight: 200;
+    font-size: 20px;
+}
+.suggestions{
+    text-align: center;
+    background-color: black;
+    color: white;
+    padding: 20px 0;
+}
+
+form label{
+    font-size: 20px;
+}
+form button{
+    font-size: 25px;
+    border: none;
+    background-color: blue;
+    color: white;
+}
+
+form textarea{
+    position: relative;
+    top: 10px;
+    width: 300px;
+    border: none;
+    border-radius: 0px;
+}
+form input{
+    height: 3vh;
+}
+
+.paxiBurner{
+    background-color: purple;
+    padding-top: 20px;
+    padding-left: 4%;
+    color: white;
+    height: 11vh;
+}
+.burner_photo{
+    height: 60px;
+    width: 130px;
+}
+.paxiBurner h3{
+    position: relative;
+    left: 150px;
+    bottom: 94px;
+    font-size: 30px;
+}
+.paxiBurner h2{
+    position: relative;
+    left: 150px;
+    bottom: 120px;
+    font-size: 20px;
+}
+.paxiBurner h2 a{
+    text-decoration: none;
+    color: rgb(13, 13, 78);
+}
+@media (max-width: 970px){
+    form{
+        display: flex;
+        flex-direction: column;
+        text-align: right;
+    }
+    form .name-input{
+        width: 30%;
+        position: relative;
+        bottom: 10px;
+        left: 19%;
+       
+    }
+    form .name{
+        font-size: 25px;
+        position: relative;
+        right:83%;
+        top: 16px;
+    }
+    form .email-input{
+        width: 30%;
+        position: relative;
+        left: 65%;
+        bottom: 64px;
+    }
+    form .email{
+        font-size: 25px;
+        position: relative;
+        right: 36%;
+        bottom:34px;
+    }
+    form textarea{
+        width: 71.8%;
+        position: relative;
+        left: 24%;
+        margin-top: -90px;
+    }
+    form .message{
+        font-size: 25px;
+        position: relative;
+        right: 77%;
+        bottom: 50px;
+       
+    }
+    form button{
+        width: 86.5%;
+        position: relative;
+        left: 9.5%;
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 740px){
+    .burner_photo{
+        height: 7vh;
+        width: 15%;
+    }
+    .paxiBurner{
+        background-color: purple;
+        padding-top: 20px;
+        padding-left: 4%;
+        color: white;
+        height: 9vh;
+    }
+
+    .paxiBurner h3{
+        position: relative;
+        left: 16%;
+        bottom: 84px;
+        font-size: 25px;
+    }
+    .paxiBurner h2{
+        position: relative;
+        left: 16%;
+        bottom: 100px;
+        font-size: 15px;
+    }
+}
+@media (max-width: 600px){
+    .paxiBurner h3{
+        font-size: 20px;
+    }
+    .paxiBurner h2{
+        font-size: 15px;
+    }
+}
+@media (max-width: 460px){
+    .paxiBurner h3{
+        font-size: 18px;
+        margin-right: 2%;
+    }
+    .paxiBurner h2{
+        font-size: 13px;
+    }
+}

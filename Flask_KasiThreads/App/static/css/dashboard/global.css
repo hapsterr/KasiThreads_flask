@@ -1,0 +1,55 @@
+body{
+    display: flex;
+    flex-direction: row;
+    margin: 0px 2%;
+    overflow-x: hidden;
+}
+
+.left{
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    height: 100vh;
+    border-right: 2px solid gray;
+    position: fixed;
+    z-index: 100;
+    background-color: white;
+    
+}
+.right{
+    margin-left: 26%;
+    width: 75%;
+}
+.top{
+    width: 100%;
+    border-bottom: 2px solid gray;
+    height: 15vh;
+    background-color: white;
+    position: fixed;
+    z-index: 10;
+}
+.bottom{
+    width: 100%;
+    padding-left: 5%;
+    margin-top: 15vh;
+}
+a{
+    text-decoration: none;
+    color: black;
+    font-size: 30px;
+    padding-bottom: 3vh;
+}
+a:hover{
+    color: aqua;
+}
+h1{
+    padding-top: 5vh;
+    padding-bottom: 2vh;
+    font-weight: 800;
+    font-family: "Jaini Purva", system-ui;
+    font-size: 35px;
+}
+.price{
+    font-size: 30px;
+    color: black;
+}

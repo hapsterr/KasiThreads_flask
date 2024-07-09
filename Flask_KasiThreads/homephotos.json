@@ -1,0 +1,28 @@
+{
+    "HomePhotos": [
+        {
+            "id": "firstphoto",
+            "url": "../../../static/images/image3.webp",
+            "heading": "Most Bought product",
+            "category": "Brand",
+            "description": "get your favourite at a reasonable price"
+        }
+        
+    ],
+    "HomeRightPhotos":[
+        {
+            "id": "secondphoto",
+            "url": "../../../static/images/image3.webp",
+            "heading": "Most Bought product",
+            "category": "Brand",
+            "description": "get your favourite at a reasonable price" 
+        },
+        {
+            "id": "thirdphoto",
+            "url": "../../../static/images/image3.webp",
+            "heading": "Most Bought product",
+            "category": "Brand",
+            "description": "get your favourite at a reasonable price" 
+        }
+    ]
+}

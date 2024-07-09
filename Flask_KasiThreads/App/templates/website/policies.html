@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KasiThreads</title>
+    <link rel="stylesheet" href="../../../static/css/website/global.css">
+    <link rel="stylesheet" href="../../../static/css/website/home.css">
+    <link rel="stylesheet" href="../../../static/css/website/policies.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jaini+Purva&family=Poetsen+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div>
+        <div class="menu-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+        <h1>KasiThreads</h1>
+        </div>
+        <div>
+        <nav class="navigation">
+            <ul>
+                <li><a href="{{url_for('website_home')}}">Home</a></li>
+                <li><a href="{{url_for('shop')}}">Shop</a></li>
+                <li><a href="{{url_for('about')}}">About</a></li>
+            </ul>
+        </nav>
+        <div class="account-links">
+            <a href="{{url_for('account')}}"><i class="fa fa-user user" aria-hidden="true"></i></a>
+            <a href="{{url_for('cart')}}" id="cart"><i class="fa fa-shopping-cart shopping_cart" aria-hidden="true"></i></a>
+        </div>
+        </div>
+    </header>
+
+    <!--Navigation for mobile devices-->
+    <div class="mobile-nav" id="mobile-nav">
+        <div>
+            <div class="close-bar" id="close-bar">
+                <span class="bar1"></span>
+                <span class="bar2"></span>
+            </div>
+            <h1>KasiThreads</h1>
+        </div>
+        <ul>
+            <li><a href="{{url_for('website_home')}}">Home</a></li>
+            <li><a href="{{url_for('shop')}}">Shop</a></li>
+            <li><a href="{{url_for('about')}}">About</a></li>
+        </ul>
+    </div>
+    
+    <!--Adding the shopping cart page-->
+    <div id="iframeContainer">
+        <iframe id="iframe" src=""></iframe>
+    </div>
+   
+    <!--About Page Contents-->
+    <section class="policies">
+        <div class="heading_about">Purchases Policy</div>
+        <h6>Purchases are valid for 30 days from the date of purchase and receipt of payment. <br>
+            If your order is not delivered within two weeks, please write an email to KasiThreads, and we will follow up on the order. <br>
+            If, after two weeks of contacting KasiThreads, you have not received your order, you may request a refund by following the proper procedures. <br>
+        </h6>
+        <div class="heading_about">Return Policy</div>
+        <h6>From the date you receive your order, you have two working days to lodge a complaint about the product. <br>
+            Returns will be valid only for the following reasons: damaged goods, incorrect size, or incorrect item. <br>
+            To initiate a return, please write to KasiThreads, providing pictures of the product and your customer number. <br>
+            KasiThreads will respond within two working days. <br>
+            Transportation costs for the return will be covered by KasiThreads, and you will receive a 10% discount on your next use of our services. <br>
+        </h6>
+        <div class="heading_about">Transportation Policy</div>
+        <h6>The website offers two transportation methods: Aramex store to door and Paxi. <br>
+            Aramex store to door delivery ensures your product will arrive within three working days at a cost of R100. <br>
+            Paxi offers two options: delivery at R100 within 3-5 business days or at R60 within 7-9 business days. <br>
+        </h6>
+    </section>
+    <!--Suggesting Burner-->
+    <section class="suggestions" id="contact">
+        <h2>Help us grow our brand, and the brands that are featured by sending your suggestions</h2>
+        <form id="contact-form">
+            <input class="name-input" type="text" id="name" name="user_name" placeholder="Name" required>
+            <input class="email-input" type="email" id="email" name="user_email" placeholder="email" required>
+            <textarea class="message-input" id="message" name="message" placeholder="Suggestion" required></textarea>
+            
+            <button type="submit">Send</button>
+        </form>
+    </section>
+
+<!--Global Footer-->
+    <section class="footer">
+        <div class="footerLinks">
+            <div class="contact">
+                <h2>Contact Us</h2>
+                <a href="kasithreads31@gmail.com">kasithreads31@gmail.com</a>
+                <a href="tel:+2764 614 8836">0646148836</a>
+            </div>
+            <div class="company">
+                <h2>Company</h2>
+                <a href="../about/index.html">About Us</a>
+                <a href="{{url_for('policies')}}">Policies</a>
+                <a href="../about/index.html">Careers</a>
+            </div>
+        </div>
+        <hr>
+        <div class="footerInfo">
+            <div class="logoSide">
+                <h1>KasiThreads</h1>
+                <h4>Where Local Shines</h4>
+                <h5>All Rights Reserved|&copy;copyright 2024</h5>
+            </div>
+            <div class="socialLinks">
+                <a href="https://www.facebook.com" ><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com" ><i class="fab fa-instagram"></i></a>
+                <a href="https://www.tiktok.com" ><i class="fab fa-tiktok"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script>
+        (function(){
+            emailjs.init("G_lZAInkhrCqMrkI7"); 
+        })();
+    </script>
+    <script src="../../../static/javascript/website/home.js"></script>
+    <script src="../../../static/javascript/website/global.js"></script>
+</body>
+</html>

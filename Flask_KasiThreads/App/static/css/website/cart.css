@@ -1,0 +1,21 @@
+.cartClose span{
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: gray;
+    position: relative;
+    top: 30px;
+    left: 30px;
+}
+
+.cartClose .bar1 {
+    transform: rotate(45deg);
+}
+.cartClose .bar2 {
+    transform: rotate(-45deg);
+    top: 27px; 
+}
+.cartClose{
+    width: 2%;
+    cursor: pointer;
+}

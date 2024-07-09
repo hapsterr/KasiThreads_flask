@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="../../static/css/dashboard/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jaini+Purva&family=Poetsen+One&display=swap" rel="stylesheet">
+</head>
+<body>
+    <section class="left">
+        <h1>KasiThreads</h1>
+        <a href="{{url_for('home')}}">Home</a>
+        <a href="{{url_for('brands')}}">Brands</a>
+        <a href="{{url_for('home_photos')}}">Home photos</a>
+        <a href="{{url_for('products')}}">products</a>
+        <a href="{{url_for('orders')}}">orders</a>
+        <a href="{{url_for('settings')}}">settings</a>
+    </section>
+
+    <section class="right">
+        <section class="top">
+            
+        </section>
+
+        <section class="bottom">
+            <h2>{{user}}, Welcome to KasiThreads Dashboard, you are loggedin as a {{user_type}}</h2>
+            <div class="orders">New orders will appear here</div>
+        </section>
+    </section>
+</body>
+</html>

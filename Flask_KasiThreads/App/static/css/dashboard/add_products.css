@@ -1,0 +1,12 @@
+textarea{
+    width: 50%;
+    height: 20vh;
+}
+
+button{
+    height: 5vh;
+    width: 80px;
+    font-size: 15px;
+    color: white;
+    background-color: blueviolet;
+}
