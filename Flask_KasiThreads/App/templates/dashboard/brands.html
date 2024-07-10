@@ -6,6 +6,7 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="../../static/css/dashboard/global.css">
     <link href="https://fonts.googleapis.com/css2?family=Jaini+Purva&family=Poetsen+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <section class="left">
@@ -20,12 +21,25 @@
 
     <section class="right">
         <section class="top">
-            
+            <img src="../static/uploads/{{brandlogo[2]}}" alt="{{user}}", style="width: 130px;">
+            <h2> {{user}}</h2>
+            <div class="header">
+                <i class="fa fa-user user" aria-hidden="true"></i>
+                <div class="logout">
+                    <select name="logout" id="logout" onchange="handleLogout(event)">
+                        <option value="" disabled selected></option>
+                        <option value="logout">Logout</option>
+                    </select>
+                </div>
+            </div>
         </section>
 
         <section class="bottom">
-            <h2>User, Welcome to KasiThreads Dashboard, you are loggedin as a Brand Owner</h2>
-            <form action="/register_user" method="post">
+            <h2>{{user|capitalize}}, Welcome to KasiThreads Dashboard, you are loggedin as an Admin user</h2>
+            <form action="/register_user" method="post" enctype="multipart/form-data">
+                <label for="logo">Brand logo:</label>
+                <input type="file" name="logo" accept="image/*" required><br><br>
+
                 <label for="brandname">Brandname:</label>
                 <input type="text" id="brandname" name="brandname" required><br><br>
                 
@@ -43,7 +57,19 @@
                 
                 <button type="submit">Register</button>
             </form>
+
+            <section>
+
+            </section>
         </section>
     </section>
+
+    <script>
+        function handleLogout(event) {
+            if (event.target.value === "logout") {
+                window.location.href = "{{ url_for('logout') }}";
+            }
+        }
+    </script>
 </body>
 </html>

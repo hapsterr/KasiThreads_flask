@@ -1,4 +1,1 @@
-flask
-flask-mysql
-flask-bcrypt
-flask-login
+pip install flask flask-mysql flask-bcrypt flask-login

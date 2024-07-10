@@ -60,11 +60,41 @@
         <div id="secondthird"></div>
     </div>
    
+    <!--Brands -->
+    <section class="brands">
+        {% for brand in  brands%}
+        <a href="{{url_for('brandproducts', brand_id=brand[1])}}" class="brand">
+            <img src="../static/uploads/{{ brand[2] }}" alt="{{ brand[2] }}">
+        </a>
+        {% endfor %}
+    </section>
     <!--Paxi Burner-->
     <section class="paxiBurner">
-        <a href="https://www.paxi.co.za/paxi-points"  target="_blank"><img src="../../../static/images/paxi logo.webp" class="burner_photo" alt="pep paxi"></a>
+        <a href="https://www.paxi.co.za/paxi-points"  target="_blank"><img src="../../static/uploads/636a4b9640d40d161b81e109_PAXI_logo[93].webp" class="burner_photo" alt="pep paxi"></a>
         <h3>KasiThreads uses Pep Paxi for deliveries.</h3>
         <h2>Find the nearest Paxi point to your location. <a href="https://www.paxi.co.za/paxi-points">Paxi</a></h2>
+    </section>
+
+    <!--Home products-->
+
+    <section class="homeproducts">
+        <h2>New in store</h2>
+        <h3>New in store from mansi's hottests local brands</h3>
+        <div class="scroll-container">
+            <button class="scroll-btn prev">&lt;</button>
+            <div class="scroll-content" >
+                {% for product in products %}
+                <a href="{{ url_for('product_detail', product_id=product[0]) }}" class="product">
+                    <img src="../static/uploads/{{product[3]}}" alt="{{ product[1] }}">
+                    <span>{{product[7]|capitalize}}</span>
+                    <h3>{{ product[1] }}</h3>
+                    <p>R{{ product[4] }}</p>
+                </a>
+                {% endfor %}
+            
+            </div>
+            <button class="scroll-btn next">&gt;</button>
+        </div>
     </section>
     <!--Suggesting Burner-->
     <section class="suggestions" id="contact">

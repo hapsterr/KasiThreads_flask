@@ -6,6 +6,8 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="../../static/css/dashboard/global.css">
     <link href="https://fonts.googleapis.com/css2?family=Jaini+Purva&family=Poetsen+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard/alert.css') }}">
 </head>
 <body>
     <section class="left">
@@ -20,13 +22,48 @@
 
     <section class="right">
         <section class="top">
-            
+            <img src="../static/uploads/{{brandlogo[2]}}" alt="{{user}}", style="width: 130px;">
+            <h2>{{user|capitalize}}</h2>
+            <div class="header">
+                <i class="fa fa-user user" aria-hidden="true"></i>
+                <div class="logout">
+                    <select name="logout" id="logout" onchange="handleLogout(event)">
+                        <option value="" disabled selected></option>
+                        <option value="logout">Logout</option>
+                    </select>
+                </div>
+            </div>
         </section>
 
         <section class="bottom">
-            <h2>{{user}}, Welcome to KasiThreads Dashboard, you are loggedin as a {{user_type}}</h2>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="container mt-4">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+            <h2>Welcome to KasiThreads Dashboard, you are loggedin as a {{user_type}}</h2>
             <div class="orders">New orders will appear here</div>
         </section>
     </section>
+
+    <script>
+        function handleLogout(event) {
+            if (event.target.value === "logout") {
+                window.location.href = "{{ url_for('logout') }}";
+            }
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
 </html>

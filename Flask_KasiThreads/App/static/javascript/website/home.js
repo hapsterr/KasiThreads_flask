@@ -72,3 +72,23 @@ function displayData(data) {
 
 
 fetchJSON();
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const scrollContainer = document.querySelector('.scroll-content');
+    const prevBtn = document.querySelector('.prev');
+    const nextBtn = document.querySelector('.next');
+
+    // Event listener for previous button
+    prevBtn.addEventListener('click', function() {
+        scrollContainer.scrollLeft -= 200;
+    });
+
+    // Event listener for next button
+    nextBtn.addEventListener('click', function() {
+        scrollContainer.scrollLeft += 200;
+    });
+    setInterval(function() {
+        scrollContainer.scrollLeft += 200; // Adjust this to scroll left or right as needed
+    }, 6000);
+});

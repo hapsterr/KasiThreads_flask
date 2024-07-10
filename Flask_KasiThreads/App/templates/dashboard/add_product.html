@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../../static/css/dashboard/global.css">
     <link rel="stylesheet" href="../../static/css/dashboard/add_products.css">
     <link href="https://fonts.googleapis.com/css2?family=Jaini+Purva&family=Poetsen+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     
@@ -22,11 +23,22 @@
     
         <section class="right">
             <section class="top">
-                
+                <img src="../static/uploads/{{brandlogo[2]}}" alt="{{user}}", style="width: 130px;">
+                <h2>{{user|capitalize}}</h2>
+                <div class="header">
+                    <i class="fa fa-user user" aria-hidden="true"></i>
+                    <div class="logout">
+                        <select name="logout" id="logout" onchange="handleLogout(event)">
+                            <option value="" disabled selected></option>
+                            <option value="logout">Logout</option>
+                        </select>
+                    </div>
+                </div>
             </section>
     
             <section class="bottom">
                 <h2>Add Product</h2>
+                <h2>Products that you add will be classified as {{user}} products, and {{user}} will be held acountable for each product.</h2>
                 <form action="/upload" method="post" enctype="multipart/form-data">
                     <label for="photo">Upload Photos:</label>
                     <input type="file" name="photo" accept="image/*" required><br><br>
@@ -39,7 +51,7 @@
 
                     <label for="type">Product Type:</label>
                     <select id="type" name="type" onchange="updateSizeOptions()" required>
-                        <option value="">Select Type</option>
+                        <option value="" disabled selected>Select Type</option>
                         <option value="shoes">Shoes</option>
                         <option value="clothing">Clothing</option>
                     </select><br><br>
@@ -58,5 +70,12 @@
 
 
         <script src="../../static/javascript/dashboard/add_products.js"></script>
+        <script>
+            function handleLogout(event) {
+                if (event.target.value === "logout") {
+                    window.location.href = "{{ url_for('logout') }}";
+                }
+            }
+        </script>
 </body>
 </html>

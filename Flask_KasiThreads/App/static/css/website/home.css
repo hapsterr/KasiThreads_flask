@@ -38,6 +38,11 @@
     position: relative;
     
 }
+
+.brand img{
+    height: 25vh;
+    width: 15%;
+}
 .suggestions h2{
     font-family: "Poppins", sans-serif;
     font-weight: 200;
@@ -98,6 +103,78 @@ form input{
     text-decoration: none;
     color: rgb(13, 13, 78);
 }
+.homeproducts{
+    text-align: center;
+    height: 75vh;
+    overflow-x: auto;
+    overflow-y: hidden;
+    
+}
+.homeproducts h2{
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 30px;
+}
+.homeproducts span{
+    text-decoration: none;
+    font-family: "Bree Serif", serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 20px;
+    color: gray;
+}
+.homeproducts h3{
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 400;
+    color: gray;
+    font-style: normal;
+    font-size: 15px;
+}
+.homeproducts img{
+    border-radius: 25px;
+    
+}
+.homeproducts a{
+    text-decoration: none;
+    height: 20vh;
+    width: calc(100% / 5);
+}
+.homeproducts a h3{
+    color: black;
+    font-size:15px ;
+    font-weight: 400;
+    position: relative;
+    bottom: 10px;
+}
+.homeproducts a p{
+    color: black;
+    font-size:20px ;
+    font-weight: 400;
+    position: relative;
+    bottom: 20px;
+}
+.homeproducts div{
+    display: flex;
+    flex-direction: row; 
+    gap: 5%;
+    overflow-x: hidden;
+}
+.scroll-btn{
+    border: none;
+    background-color: white;
+    font-size: 50px;
+}
+.scroll-btn.prev{
+    border: none;
+    background-color: white;
+}
+.scroll-content{
+    overflow-y: hidden;
+    height: 60vh;
+    margin: 0px -50px;
+}
+
 @media (max-width: 970px){
     form{
         display: flex;

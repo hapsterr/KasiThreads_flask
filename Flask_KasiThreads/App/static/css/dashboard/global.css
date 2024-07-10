@@ -19,14 +19,19 @@ body{
 .right{
     margin-left: 26%;
     width: 75%;
+   
 }
 .top{
     width: 100%;
     border-bottom: 2px solid gray;
-    height: 15vh;
+    border-top: 2px solid gray;
+    height: 13vh;
     background-color: white;
     position: fixed;
     z-index: 10;
+    display: flex;
+    flex-direction: row;
+   
 }
 .bottom{
     width: 100%;
@@ -52,4 +57,39 @@ h1{
 .price{
     font-size: 30px;
     color: black;
+}
+
+i{
+    color: blueviolet;
+    font-size: 30px;
+}
+
+.logout select{
+    appearance: none;
+}
+.logout::before{
+    content: '\f078';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    font-size: 20px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    position: absolute;
+    top: 7vh;
+    left: 68%;
+}
+
+#logout{
+    border: none;
+    font-size: 25px;
+}
+#logout:focus{
+    outline: none;
+    border: none;
+}
+.header{
+    display: flex;
+    flex-direction: row;
+    margin-left: 50.5%;
+    margin-top: 5vh;
 }
