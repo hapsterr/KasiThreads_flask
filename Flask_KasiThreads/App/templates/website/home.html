@@ -57,16 +57,47 @@
     </div>
 
     <div class="home_photos" id="Home-photos">
-        <div id="secondthird"></div>
+        <div class="firstphoto" style="background-image: url('../../static/uploads/{{cheap[1]}}');">
+            <h2>SHOP FROM OUR NEWEST BRANDS</h2>
+            <h4>Get your favourite at an affordable price</h4>
+            <a href="{{url_for('newestbrands')}}">
+                <button>Shop Now</button>
+            </a>
+        </div>
+        <div id="secondthird">
+            <div class="secondphoto" style="background-image: url('../../static/uploads/{{cheap[2]}}');">
+                <h2>SHOP OUR MOST BOUGHT PRODUCTS</h2>
+                <h4></h4>
+                <a href="#">
+                    <button>Shop Now</button>
+                </a>
+            </div>
+            <div class="thirdphoto" style="background-image: url('../../static/uploads/{{cheap[3]}}');">
+                <h2>SHOP OUR MOST BOUGHT BRANDS</h2>
+                <h4></h4>
+                <a href="#">
+                    <button>Shop Now</button>
+                </a>
+            </div>
+        </div>
     </div>
    
     <!--Brands -->
-    <section class="brands">
-        {% for brand in  brands%}
-        <a href="{{url_for('brandproducts', brand_id=brand[1])}}" class="brand">
-            <img src="../static/uploads/{{ brand[2] }}" alt="{{ brand[2] }}">
-        </a>
-        {% endfor %}
+    <section class="featured_brands">
+        <h2>FEATURED BRANDS</h2>
+
+        <div class="scroll-container">
+            <button class="scroll-btn prev">&lt;</button>
+            <div class="scroll-brands" >
+                {% for brand in  brands%}
+                <a href="{{url_for('brandproducts', brand_id=brand[1])}}" class="brand">
+                    <img src="../static/uploads/{{ brand[2] }}" alt="{{ brand[2] }}">
+                </a>
+                {% endfor %}
+            
+            </div>
+            <button class="scroll-btn next">&gt;</button>
+        </div>
     </section>
     <!--Paxi Burner-->
     <section class="paxiBurner">
@@ -78,22 +109,22 @@
     <!--Home products-->
 
     <section class="homeproducts">
-        <h2>New in store</h2>
+        <h2>NEW IN STORE</h2>
         <h3>New in store from mansi's hottests local brands</h3>
         <div class="scroll-container">
-            <button class="scroll-btn prev">&lt;</button>
+            <button class="scroll-btn prevprod">&lt;</button>
             <div class="scroll-content" >
                 {% for product in products %}
                 <a href="{{ url_for('product_detail', product_id=product[0]) }}" class="product">
                     <img src="../static/uploads/{{product[3]}}" alt="{{ product[1] }}">
                     <span>{{product[7]|capitalize}}</span>
-                    <h3>{{ product[1] }}</h3>
+                    <h3>{{ product[1]|upper }}</h3>
                     <p>R{{ product[4] }}</p>
                 </a>
                 {% endfor %}
             
             </div>
-            <button class="scroll-btn next">&gt;</button>
+            <button class="scroll-btn nextprod">&gt;</button>
         </div>
     </section>
     <!--Suggesting Burner-->

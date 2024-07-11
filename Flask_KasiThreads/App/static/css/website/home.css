@@ -3,6 +3,40 @@
     display: flex;
     flex-direction: row;
     margin: 0px 1%;
+    
+}
+.home_photos h2{
+    font-family: "Sedan SC", serif;
+    font-weight: 900;
+    font-style: normal;
+    font-size: 25px;
+    cursor: default;
+    color: white;
+    padding-top: 7vh;
+    padding-left: 4%;
+}
+.home_photos h4{
+    font-family: "Sedan SC", serif;
+    font-weight: 900;
+    font-style: normal;
+    font-size: 20px;
+    cursor: default;
+    color: white;
+    padding-left: 4%;
+    padding-top: 30px;
+}
+.home_photos button{
+    border: none;
+    color: white;
+    background-color: black;
+    font-size: 30px;
+    cursor: pointer;
+}
+.home_photos .firstphoto button{
+    position: relative;
+    top: 20vh;
+    left: 70%;
+
 }
 .home_photos .firstphoto h3{
     font-size: 45px;
@@ -18,14 +52,13 @@
     height: 91vh;
     width: 55%;
     position: relative;
-    right: 44%;
     top: 10px;
 }
 #secondthird{
     height: 90vh;
     width: 44%;
     position: relative;
-    left: 56%;
+    left: 1%;
     bottom: 10px;
 }
 .secondphoto{
@@ -34,14 +67,14 @@
 }
 .thirdphoto{
     background-size: cover;
-    height: 44.5vh;
+    height: 45.5vh;
     position: relative;
-    
+    bottom: 10px;
 }
 
 .brand img{
-    height: 25vh;
-    width: 15%;
+    height: 190px;
+    width: 200px;
 }
 .suggestions h2{
     font-family: "Poppins", sans-serif;
@@ -76,6 +109,22 @@ form input{
     height: 3vh;
 }
 
+.featured_brands{
+    text-align: center;
+    margin-bottom: 1%;
+}
+.featured_brands a{
+    gap: 5%;
+}
+.featured_brands a:hover{
+    transform: scale(1.05);
+}
+.featured_brands h2{
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 30px;
+}
 .paxiBurner{
     background-color: purple;
     padding-top: 20px;
@@ -133,12 +182,15 @@ form input{
 }
 .homeproducts img{
     border-radius: 25px;
-    
+    transition-duration: 0.2s;
+}
+.homeproducts img:hover{
+    transform: scale(1.05);
 }
 .homeproducts a{
     text-decoration: none;
     height: 20vh;
-    width: calc(100% / 5);
+    width: calc(100%/5);
 }
 .homeproducts a h3{
     color: black;
@@ -160,6 +212,12 @@ form input{
     gap: 5%;
     overflow-x: hidden;
 }
+.featured_brands div{
+    display: flex;
+    flex-direction: row; 
+    gap: 5%;
+    overflow-x: hidden;
+ }
 .scroll-btn{
     border: none;
     background-color: white;
@@ -171,7 +229,12 @@ form input{
 }
 .scroll-content{
     overflow-y: hidden;
-    height: 60vh;
+    height: 60VH;
+    margin: 0px -50px;
+}
+.scroll-brands{
+    overflow-y: hidden;
+    height: auto;
     margin: 0px -50px;
 }
 

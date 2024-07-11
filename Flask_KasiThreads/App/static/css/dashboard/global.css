@@ -18,25 +18,41 @@ body{
 }
 .right{
     margin-left: 26%;
+    margin-right: 10%;
     width: 75%;
    
 }
-.top{
+.top {
     width: 100%;
     border-bottom: 2px solid gray;
-    border-top: 2px solid gray;
-    height: 13vh;
+    height: 90px;
     background-color: white;
     position: fixed;
     z-index: 10;
     display: flex;
     flex-direction: row;
-   
+    justify-content: left; /* Center the content horizontally */
+    padding-right: 15%; /* Add padding on the left and right */
+    box-sizing: border-box; /* Ensure padding is included in the width */
+    gap: 60%;
+}
+
+
+.top .brand_logo{
+    display: flex;
+    flex-direction: row;
+}
+.top img{
+    height: 80px;
+    width: 90px;
+    border-radius: 200px;
+    margin-left: 10px;
+    margin-top: 5px;
 }
 .bottom{
     width: 100%;
     padding-left: 5%;
-    margin-top: 15vh;
+    margin-top: 100px;
 }
 a{
     text-decoration: none;
@@ -62,6 +78,7 @@ h1{
 i{
     color: blueviolet;
     font-size: 30px;
+    margin-right: 4%;
 }
 
 .logout select{
@@ -75,8 +92,8 @@ i{
     transform: translateY(-50%);
     pointer-events: none;
     position: absolute;
-    top: 7vh;
-    left: 68%;
+    top: 2vh;
+    left: 40%;
 }
 
 #logout{
@@ -90,6 +107,7 @@ i{
 .header{
     display: flex;
     flex-direction: row;
-    margin-left: 50.5%;
+    position: relative;
+   
     margin-top: 5vh;
 }

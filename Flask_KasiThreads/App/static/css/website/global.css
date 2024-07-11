@@ -212,25 +212,27 @@ header {
 #iframeContainer {
     display: none;
     position: absolute;
+    z-index: 1000;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
     justify-content: center;
     align-items: center;
 }
 
 iframe {
-    width: 800px; 
+    width: 60%; 
     height: 100vh;
     border: none;
     background-color: white;
-    margin-left: 50%;
+    margin-left: 40%;
     position: sticky;   
     z-index: 2000;
 }
 @media (max-width: 600px) {
+    
     .mobile-nav div h1{
         position: relative;
         top: 5px;

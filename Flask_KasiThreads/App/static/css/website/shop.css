@@ -11,7 +11,7 @@
 
 .product{
     width: calc(100% / 6);
-    border: 1.5px solid gray;
+    border: none;
     margin-top: 5vh;
     transition-duration: 0.3s;
     text-decoration: none;
@@ -23,4 +23,32 @@
 .product img{
     height: 30vh;
     width: 100%;
+    border-radius: 25px;
 }
+
+.products span{
+    text-decoration: none;
+    font-family: "Bree Serif", serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 20px;
+    color: gray;
+}
+
+.products h3{
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 15px;
+
+    position: relative;
+    bottom: 8px;
+}
+
+.products p{
+    position: relative;
+    bottom: 15px;
+    font-size: 20px;
+    font-weight: 400;
+}
+

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../../static/css/dashboard/global.css">
     <link href="https://fonts.googleapis.com/css2?family=Jaini+Purva&family=Poetsen+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard/alert.css') }}">
 </head>
 <body>
     <section class="left">
@@ -21,8 +22,10 @@
 
     <section class="right">
         <section class="top">
-            <img src="../static/uploads/{{brandlogo[2]}}" alt="{{user}}", style="width: 130px;">
-            <h2> {{user}}</h2>
+            <div class="brand_logo">
+                <img src="../static/uploads/{{brandlogo[2]}}" alt="{{user}}">
+                <h2>{{user|capitalize}}</h2>
+            </div>
             <div class="header">
                 <i class="fa fa-user user" aria-hidden="true"></i>
                 <div class="logout">
@@ -35,6 +38,21 @@
         </section>
 
         <section class="bottom">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="container mt-4">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% endwith %}
+
             <h2>{{user|capitalize}}, Welcome to KasiThreads Dashboard, you are loggedin as an Admin user</h2>
             <form action="/register_user" method="post" enctype="multipart/form-data">
                 <label for="logo">Brand logo:</label>
@@ -71,5 +89,9 @@
             }
         }
     </script>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
 </html>

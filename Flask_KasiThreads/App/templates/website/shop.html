@@ -71,7 +71,8 @@
         {% for product in products %}
         <a href="{{ url_for('product_detail', product_id=product[0]) }}" class="product">
             <img src="../static/uploads/{{product[3]}}" alt="{{ product[1] }}">
-            <h3>Name: {{ product[1] }}</h3>
+            <span>{{product[7] |capitalize}}</span>
+            <h3>{{ product[1] | upper }}</h3>
             <p>R{{ product[4] }}</p>
         </a>
         {% endfor %}
@@ -132,7 +133,6 @@
             document.getElementById('sortForm').submit();
         }
     </script>
-    <script src="../../../static/javascript/website/home.js"></script>
     <script src="../../../static/javascript/website/global.js"></script>
     
 </body>

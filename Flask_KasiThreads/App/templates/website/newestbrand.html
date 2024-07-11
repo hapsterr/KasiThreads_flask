@@ -68,14 +68,14 @@
     </form>
 
     <section class="products">
-        {% for product in products %}
-        <a href="{{ url_for('product_detail', product_id=product[0]) }}" class="product">
-            <img src="../static/uploads/{{product[3]}}" alt="{{ product[1] }}">
-            <span>{{product[7]|capitalize}}</span>
-            <h3>{{ product[1] }}</h3>
-            <p>R{{ product[4] }}</p>
+        {% for brand in brandnames %}
+        <a href="{{ url_for('product_detail', product_id=brand.product_id) }}" class="product">
+            <img src="../static/uploads/{{ brand.product_filename }}" alt="{{ brand.product_name }}">
+            <span>{{brand.brandname| capitalize}}</span>
+            <h3>{{brand.product_name}}</h3>
+            <p>R{{ brand.product_price }}</p>
         </a>
-        {% endfor %}
+    {% endfor %}
     </section>
     
     <!--Suggesting Burner-->

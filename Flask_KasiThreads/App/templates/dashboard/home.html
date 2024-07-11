@@ -22,8 +22,10 @@
 
     <section class="right">
         <section class="top">
-            <img src="../static/uploads/{{brandlogo[2]}}" alt="{{user}}", style="width: 130px;">
-            <h2>{{user|capitalize}}</h2>
+            <div class="brand_logo">
+                <img src="../static/uploads/{{brandlogo[2]}}" alt="{{user}}">
+                <h2>{{user|capitalize}}</h2>
+            </div>
             <div class="header">
                 <i class="fa fa-user user" aria-hidden="true"></i>
                 <div class="logout">
@@ -36,7 +38,7 @@
         </section>
 
         <section class="bottom">
-            {% with messages = get_flashed_messages(with_categories=true) %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <div class="container mt-4">
                 {% for category, message in messages %}

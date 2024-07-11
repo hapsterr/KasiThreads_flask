@@ -34,50 +34,31 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-//Adding home photos to html
-async function fetchJSON() {
-    const response = await fetch('homephotos.json');
-    const data = await response.json();
-    displayData(data);
-}
 
-function displayData(data) {
-    const jsonDataDiv = document.getElementById('Home-photos');
-    const jsonSecondThirdDiv = document.getElementById('secondthird');
-    jsonSecondThirdDiv.innerHTML = '';
-    
-   data.HomePhotos.forEach(photo => {
-        const photoDiv = document.createElement('div');
-        photoDiv.classList.add(photo.id);
-        photoDiv.style.backgroundImage = `url('${photo.url}')`;
-        photoDiv.innerHTML = `
-            <h3>${photo.heading}</h3>
-            <h2>${photo.category}</h2>
-            <h1>${photo.description}</h1>
-        `;
-        jsonDataDiv.appendChild(photoDiv);
+document.addEventListener('DOMContentLoaded', function() {
+    const scrollbrands = document.querySelector('.scroll-brands');
+    const prevBtn = document.querySelector('.prev');
+    const nextBtn = document.querySelector('.next');
+
+    // Event listener for previous button
+    prevBtn.addEventListener('click', function(){
+        scrollbrands.scrollLeft -= 200;
     });
-    data.HomeRightPhotos.forEach(photo => {
-        const photoDiv = document.createElement('div');
-        photoDiv.classList.add(photo.id);
-        photoDiv.style.backgroundImage = `url('${photo.url}')`;
-        photoDiv.innerHTML = `
-            <h3>${photo.heading}</h3>
-            <h2>${photo.category}</h2>
-            <h1>${photo.description}</h1>
-        `;
-        jsonSecondThirdDiv.appendChild(photoDiv);
+
+    nextBtn.addEventListener('click', function() {
+        scrollbrands.scrollLeft += 200;
     });
-}
-
-
-fetchJSON();
+    setInterval(function() {
+        scrollbrands.scrollLeft += 200;
+    }, 10000);
+   
+});
 
 
 document.addEventListener('DOMContentLoaded', function() {
     const scrollContainer = document.querySelector('.scroll-content');
-    const prevBtn = document.querySelector('.prev');
-    const nextBtn = document.querySelector('.next');
+    const prevBtn = document.querySelector('.prevprod');
+    const nextBtn = document.querySelector('.nextprod');
 
     // Event listener for previous button
     prevBtn.addEventListener('click', function() {
@@ -88,7 +69,8 @@ document.addEventListener('DOMContentLoaded', function() {
     nextBtn.addEventListener('click', function() {
         scrollContainer.scrollLeft += 200;
     });
+   
     setInterval(function() {
-        scrollContainer.scrollLeft += 200; // Adjust this to scroll left or right as needed
+        scrollContainer.scrollLeft += 200;
     }, 6000);
 });

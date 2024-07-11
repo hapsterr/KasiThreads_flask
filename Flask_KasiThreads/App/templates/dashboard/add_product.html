@@ -23,8 +23,10 @@
     
         <section class="right">
             <section class="top">
-                <img src="../static/uploads/{{brandlogo[2]}}" alt="{{user}}", style="width: 130px;">
-                <h2>{{user|capitalize}}</h2>
+                <div class="brand_logo">
+                    <img src="../static/uploads/{{brandlogo[2]}}" alt="{{user}}">
+                    <h2>{{user|capitalize}}</h2>
+                </div>
                 <div class="header">
                     <i class="fa fa-user user" aria-hidden="true"></i>
                     <div class="logout">
@@ -40,14 +42,20 @@
                 <h2>Add Product</h2>
                 <h2>Products that you add will be classified as {{user}} products, and {{user}} will be held acountable for each product.</h2>
                 <form action="/upload" method="post" enctype="multipart/form-data">
-                    <label for="photo">Upload Photos:</label>
+                    <label for="photo">Upload Photo:</label>
                     <input type="file" name="photo" accept="image/*" required><br><br>
 
                     <label for="name">Product Name:</label>
                     <input type="text" name="Product Name" placeholder="Product name"  required><br><br>
 
                     <label for="price">R:</label>
-                    <input type="number"  name="Product Price" placeholder="Product Pride" step="1" min="20" required><br><br>
+                    <input type="number"  name="Product Price" placeholder="Product Price" step="1" min="50" required><br><br>
+
+                    <label for="gender">Product for Males/Females:</label>
+                    <select id="gender" name="gender" required>
+                    <option value="male">Males</option>
+                    <option value="female">Females</option>
+                    </select><br><br>
 
                     <label for="type">Product Type:</label>
                     <select id="type" name="type" onchange="updateSizeOptions()" required>
