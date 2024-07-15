@@ -19,3 +19,76 @@
     width: 2%;
     cursor: pointer;
 }
+.empty{
+    text-align: center;
+    margin-top: 50vh;
+    color: gray;
+    font-family: "Anton SC", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 30px;
+}
+
+.orders .heading{
+    text-align: center;
+    font-family: "Anton SC", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.orders .cart{
+    text-align: left;
+}
+
+.orders .total{
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 800;
+    font-style: normal;
+    font-size: 30px;
+}
+
+.orders .cart .cart-items li{
+    display: flex;
+    flex-direction: row;
+    border-bottom: 0.3px solid gray;
+    margin-right: 15%;
+}
+
+.orders .cart .cart-items li img{
+    height: 120px;
+    width: 120px;
+}
+
+.orders .cart .cart-items .productinfo h2{
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 800;
+    font-size: 15px;
+    font-style: normal;
+    position: relative;
+    bottom: 20px;
+}
+
+.orders .cart .cart-items .productinfo h3{
+    font-size: 15px;
+    position: relative;
+    bottom: 20px;
+}
+
+.orders .cart .cart-items .productinfo p{
+    font-size: 20px;
+    position: relative;
+    bottom: 20px;
+}
+
+.orders .cart .cart-items .productinfo button{
+    color: white;
+    background-color: blue;
+    border: none;
+    height: 25px;
+    position: relative;
+    bottom: 20px;
+}
+
+.orders .cart .cart-items .productinfo{
+    margin-left: 10%;
+}

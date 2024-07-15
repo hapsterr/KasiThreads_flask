@@ -42,14 +42,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Event listener for previous button
     prevBtn.addEventListener('click', function(){
-        scrollbrands.scrollLeft -= 200;
+        scrollbrands.scrollLeft -= 150;
     });
 
     nextBtn.addEventListener('click', function() {
-        scrollbrands.scrollLeft += 200;
+        scrollbrands.scrollLeft += 150;
     });
     setInterval(function() {
-        scrollbrands.scrollLeft += 200;
+        scrollbrands.scrollLeft += 150;
     }, 10000);
    
 });
@@ -62,15 +62,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Event listener for previous button
     prevBtn.addEventListener('click', function() {
-        scrollContainer.scrollLeft -= 200;
+        scrollContainer.scrollLeft -= 150;
     });
 
     // Event listener for next button
     nextBtn.addEventListener('click', function() {
-        scrollContainer.scrollLeft += 200;
+        scrollContainer.scrollLeft += 150;
     });
    
     setInterval(function() {
-        scrollContainer.scrollLeft += 200;
+        scrollContainer.scrollLeft += 150;
     }, 6000);
 });

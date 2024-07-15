@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Jaini+Purva&family=Poetsen+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton+SC&family=Asap:ital,wght@0,100..900;1,100..900&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Oswald:wght@200..700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
@@ -61,23 +64,54 @@
         <div class="product_detail">
             <img src="../static/uploads/{{ product[3] }}" alt="{{ product[1] }}">
             <div class="product_information">
-                <h3>{{ product[1] }}</h3>
+                <h3>{{product[7]|capitalize}}</h3>
+                <h4>{{ product[1] }}</h4>
                 <p>{{ product[2]|upper }}</p>
-                <p>R{{ product[4] }}</p>
+                <h5>R{{ product[4] }}</h5>
 
-                <label for="quantity">Quantity:</label>
-                <input type="number"  name="quantity" step="1" min="1" max="100" required><br><br>
-                <fieldset>
-                    <legend>Select Size:</legend>
-                    {% for size in sizes %}
-                    <label>
-                        <input type="radio" name="size" value="{{ size }}" required>
-                        {{ size }}
-                    </label>
-                    {% endfor %}
-                </fieldset>
-                <button>ADD TO CART</button>
+                <form id="addToCartForm">
+                    <label class="quantity" for="quantity">Quantity:</label>
+                    <input type="number" name="quantity" id="quantity" step="1" min="1" max="100" required><br><br>
+    
+                    <fieldset>
+                        <legend>Select Size:</legend>
+                        {% for size in sizes %}
+                        <label>
+                            <input type="radio" name="size" value="{{ size }}" required>
+                            <h3>{{ size }}</h3>
+                        </label>
+                        {% endfor %}
+                    </fieldset>
+    
+                    <button type="button" onclick="addToCart({{ product[0] }})">ADD TO CART</button>
+                </form>
             </div>
+        </div>
+
+        <div class="reviews">
+            <span>Product Reviews</span>
+            <div class="reviews_scroll">
+                {% if review_details %}
+                    {% for detail in review_details %}
+                        <div class="review">
+                            <h3>{{ detail.customer[1] }} {{ detail.customer[2] }}</h3> 
+                            <h2>{{ detail.review[1] }}</h2> 
+                            <p>{{ detail.review[4] }}</p> 
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>This product does not have reviews yet</p>
+                {% endif %}
+            </div>
+            {% if 'customer_name' in session %}
+                <form action="{{ url_for('reviews', product_id=product[0]) }}" class="review_input" method="post">
+                    <input type="text" id="review" name="review" placeholder="Write a product review" required><br>
+                    <button type="submit">SEND</button>
+                </form>
+            {% else %}
+                <h4>Login to write a review for this product</h4>
+            {% endif %}
+            
         </div>
     </section>
    
@@ -134,5 +168,8 @@
 
     <script src="{{ url_for('static', filename='javascript/website/home.js') }}"></script>
     <script src="{{ url_for('static', filename='javascript/website/global.js') }}"></script>
+    <script src="../../static/javascript/website/product.js"></script>
+
+    
 </body>
 </html>

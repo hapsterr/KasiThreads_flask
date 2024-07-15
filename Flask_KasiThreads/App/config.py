@@ -2,18 +2,24 @@ import random
 import re
 import smtplib
 import ssl
+
 from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
 from models import kasithreads_db
 import bcrypt
 import os
+
 from email.message import EmailMessage
+from email.mime.text import MIMEText
 
 email_sender = 'happyseoketsa@gmail.com'
 email_password = 'sstu ypai kfrz cgio'
+
+# initial value for verifications
 customer_verification_code = None 
 
 app = Flask(__name__)
 db = kasithreads_db(app)
+#Folder to upload all the photos
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
 app.secret_key = 'jhgf7938r97b4-2w2883e2132./,,;d,fdeg'
@@ -112,22 +118,97 @@ def shop():
 @app.route('/product/<int:product_id>')
 def product_detail(product_id):
     cursor = db.connection.cursor()
-    cursor.execute("SELECT * FROM products WHERE id = %s",(product_id,))
+
+    # Fetch the product details
+    cursor.execute("SELECT * FROM products WHERE id = %s", (product_id,))
     product = cursor.fetchone()
-    db.connection.commit()
-    cursor.close()
+
+    review_details = []
+
     if product:
+        # Fetch reviews for the given product_id
+        cursor.execute("SELECT * FROM reviews WHERE product_id = %s ORDER BY created_at ASC", (product_id,))
+        reviews = cursor.fetchall()
+
+        for review in reviews:
+            # Fetch customer details for each review
+            cursor.execute("SELECT * FROM customers WHERE id = %s", (review[3],))  # Assuming the customer_id is at index 3 in the reviews table
+            customer = cursor.fetchone()
+            review_details.append({
+                'review': review,
+                'customer': customer
+            })
+
         sizes = product[5].split(',') if product[5] else []
-        return render_template('website/product.html', product=product, sizes=sizes)
+
+        cursor.close()
+
+        return render_template('website/product.html', product=product, sizes=sizes, review_details=review_details)
     else:
+        cursor.close()
         return "Product not found"
-    
 
-@app.route('/account')
+
+@app.route('/account', methods=['GET', 'POST'])
 def account():
-    return render_template('website/login.html')
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        cursor = db.connection.cursor()
+
+        cursor.execute("SELECT * FROM customers WHERE email = %s", (email,))
+        customer = cursor.fetchone()
+
+        if customer is not None and customer[3]==email and bcrypt.checkpw(password.encode('utf-8'), customer[5].encode('utf-8')):
+            session['customer_id'] = customer[0]
+            session['customer_name'] = customer[1]
+            session['customer_lastname'] = customer[2]
+            return  redirect(url_for('website_home'))
+        else:
+            flash('Invalid credentials. Please try again.', 'danger')
+            return redirect(url_for('account'))
+    elif 'customer_name' in session:
+        return redirect(url_for('useraccount'))
+    else:
+        return render_template('website/login.html')
 
 
+# customer account page provided they are logged in 
+@app.route('/useraccount')
+def useraccount():
+    name = session.get('customer_name')
+    lastname = session.get('customer_lastname')
+    return render_template('website/useraccount.html', name =name , lastname=lastname)
+
+#customer lockout
+@app.route('/website_logout')
+def website_logout():
+    session.pop('customer_id', None)
+    session.pop('customer_name', None)
+    session.pop('customer_lastname', None)
+    flash('Loggedout', 'danger')
+    return redirect(url_for('account'))
+
+# Take logged in customer reviews
+@app.route('/reviews/<int:product_id>', methods=['POST', 'GET'])
+def reviews(product_id):
+    
+    if 'customer_name' in session:
+        customer_name = session['customer_name']
+        review = request.form['review']
+        cursor = db.connection.cursor()
+
+        cursor.execute("Select * from customers where first_name = %s", (customer_name,))
+        user = cursor.fetchone()
+        cursor.execute("INSERT INTO reviews (description, product_id, customer_id) VALUES (%s, %s, %s)", (review, product_id, user[0]))
+        db.connection.commit()
+        cursor.close()
+
+        return redirect(url_for('product_detail', product_id=product_id))
+    else:
+        return "Unauthorized", 401
+
+    
 
 @app.route('/register')
 def register():
@@ -166,13 +247,35 @@ def website_register():
 
                 email_receiver = email
                 subject = "Account Verification, from KasiThreads"
-                body = """USE THIS CODE TO VERIFY YOUR KASITHREADS ACCOUNT: """+ str(customer_verification_code)
+                body = f"""
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Jaini+Purva&family=Poetsen+One&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <br><br>
+        <div>Hi {firstname} {lastname}
+            <br><br>
+            USE THIS CODE TO VERIFY YOUR KASITHREADS ACCOUNT: <b style=" font-weight:800; font-size:20px">{customer_verification_code}</b>
+            <br><br>
+            Yours Sincerely,
+            <br>
+            KasiThreads Team.
+        </div>
+
+        <h1 style ="font-weight: 800; font-family: "Jaini Purva", system-ui; font-size: 35px; margin-left: 5%; margin-top: 15px;width: auto; ">KasiThreads</h1>
+        <h2>Where Local Shines</h2>
+    </body>
+</html>
+
+
+ """
 
                 em = EmailMessage()
                 em['From'] = email_sender
                 em['To']= email_receiver
                 em['subject']= subject
-                em.set_content(body)
+                em.set_content(MIMEText(body, 'html'))
 
                 context = ssl.create_default_context()
 
@@ -216,18 +319,153 @@ def verification():
     return render_template('website/verification.html')
 
 #Customer forgot Password
-@app.route('/forgot_password')
+@app.route('/forgot_password', methods= ['POST', 'GET'])
 def forgot_password():
+    if request.method == 'POST':
+        email = request.form['email']
+        cursor = db.connection.cursor()
+        cursor.execute("select * from customers where email = %s", (email,))
+        account = cursor.fetchone()
+
+        if account:
+            global customer_verification_code
+            customer_verification_code = random.randint(10001, 99999)
+
+            email_receiver = email
+            subject = "Verification Code, from KasiThreads"
+            body = f"""
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Jaini+Purva&family=Poetsen+One&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <br><br>
+        <div>Hi {account[1]} {account[2]},
+            <br><br>
+            USE THIS CODE TO CHANGE YOUR KASITHREADS ACCOUNT PASSWORD: <b style=" font-weight:800; font-size:20px">{customer_verification_code}</b>
+            <br><br>
+            Ignore if you did not request an account password change.
+            <br><br>
+            Yours Sincerely,
+            <br>
+            KasiThreads Team.
+        </div>
+
+        <h1 style ="font-weight: 800; font-family: "Jaini Purva", system-ui; font-size: 35px; margin-left: 5%; margin-top: 15px;width: auto; ">KasiThreads</h1>
+        <h2>Where Local Shines</h2>
+    </body>
+</html>
+"""
+
+            em = EmailMessage()
+            em['From'] = email_sender
+            em['To']= email_receiver
+            em['subject']= subject
+            em.set_content(MIMEText(body, 'html'))
+
+            context = ssl.create_default_context()
+
+            with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+                smtp.login(email_sender, email_password)
+                smtp.sendmail(email_sender, email_receiver, em.as_string())
+                session['forgotpassword_id']= account[0]
+                return redirect(url_for('forgot_password_verification'))
+        else:
+            flash("Account does not exist", 'danger')
+            return redirect(url_for('account'))
+
+
     return render_template('website/forgot_password.html')
+
+# verification when a user request to change password(forgot password)
+@app.route('/forgot_password_verification', methods= ['POST', 'GET'])
+def forgot_password_verification():
+    if request.method == 'POST':
+        
+        verification_code = customer_verification_code
+        input_code = request.form['verify']
+
+        if str(verification_code) == str(input_code):
+            return redirect(url_for('change_password', id = id))
+        else:
+            flash('Incorrect verification code')
+            return redirect(url_for('account'))
+    
+    return render_template('website/forgot_password_verification.html')
+
+# Customer New Password
+@app.route('/change_password', methods = ['POST','GET'])
+def change_password():
+    if request.method == 'POST':
+        password1 = request.form['password1']
+        password2 = request.form['password2']
+
+        if password1 == password2 :
+            hashed_password =bcrypt.hashpw(password1.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+            print(hashed_password)
+            
+            if 'forgotpassword_id' in session:
+                cursor = db.connection.cursor()
+                cursor.execute('UPDATE customers SET password_hash = %s where id = %s', (hashed_password, session.get('forgotpassword_id')))
+                db.connection.commit()
+                session.pop('forgotpassword_id', None)
+                flash('password changed successfully', 'success')
+                return redirect(url_for('account'))
+            else:
+                return redirect(url_for('account'))
+        else:
+            flash('Passwords entered do not match', 'danger')
+            return redirect(url_for('change_password'))
+    return render_template('website/change_password.html')
+
 
 @app.route('/about')
 def about():
     return render_template('website/about.html')
 
 
-@app.route('/cart')
+@app.route('/cart', methods=['POST', 'GET'])
 def cart():
-    return render_template('website/cart.html')
+    if request.method == 'POST':
+        session['cart_details'] = []
+        data = request.get_json()
+        cart_products = data.get('cart', [])
+
+        cursor = db.connection.cursor()
+
+        for cart_product in cart_products:
+            cursor.execute('SELECT * FROM products WHERE id = %s', (cart_product['productId'],))
+            product = cursor.fetchone()
+            if product:
+                finale_product = {
+                    'id': product[0],
+                    'brand': product[7],
+                    'name': product[1],
+                    'size': cart_product['size'],
+                    'quantity': cart_product['quantity'],
+                    'price': product[4]*cart_product['quantity'],
+                    'filename': product[3]
+                }
+                session['cart_details'].append(finale_product)
+
+        cursor.close()
+        referrer = request.referrer
+        if referrer.endswith('/cart'):
+            return redirect(url_for('cart'))
+        else:
+            return redirect(url_for('cart'))
+
+    if 'cart_details' in session:
+        cart_products = session['cart_details']
+        total = 0 
+        for cart_product in cart_products:
+            total += cart_product['price']
+    else:
+        cart_products = []
+        total = 0 
+    return render_template('website/cart.html', cart_products=cart_products, total = total)
+
+    
 
 @app.route('/policies')
 def policies():
@@ -424,17 +662,27 @@ def upload():
         price = request.form['Product Price']
         description = request.form['description']
         type = request.form['type']
+
         sizes = request.form.getlist('size')
 
         if image:
             filename = image.filename
-            image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             cursor = db.connection.cursor()
-            cursor.execute("INSERT INTO products (name, price, description, type, sizes, filename, brand) VALUES (%s, %s, %s, %s, %s, %s, %s)", (name, price, description, type, ','.join(sizes), filename, brand))
-            db.connection.commit()
-            cursor.close()
-            return 'Product uploaded successfully!'
-    return 'Failed to upload product!'
+            cursor.execute("select * from products where filename = %s", (filename,))
+            file_exist = cursor.fetchone()
+            if file_exist:
+                flash("Product exists, if it doen't then change the filename.",'danger')
+                return redirect(url_for('products'))
+            else:
+                image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            
+                cursor.execute("INSERT INTO products (name, price, description, type, sizes, filename, brand) VALUES (%s, %s, %s, %s, %s, %s, %s)", (name, price, description, type, ','.join(sizes), filename, brand))
+                db.connection.commit()
+                cursor.close()
+                flash('Product uploaded successfully!!!', 'success')
+                return redirect(url_for('products'))
+    flash('Failed to upload product!','danger')
+    return redirect(url_for('products'))
 
 #Delete product on the dashboard
 @app.route('/delete_product/<int:product_id>', methods=['POST'])
@@ -452,6 +700,7 @@ def delete_product(product_id):
         image_path = os.path.join(app.config['UPLOAD_FOLDER'], result[0])
 
         # Delete the product from the database
+        cursor.execute("DELETE FROM reviews WHERE product_id = %s", (product_id,))
         cursor.execute("DELETE FROM products WHERE id = %s", (product_id,))
         db.connection.commit()
 

@@ -84,7 +84,7 @@
    
     <!--Brands -->
     <section class="featured_brands">
-        <h2>FEATURED BRANDS</h2>
+        <h2>FEATURED BRANDS </h2>
 
         <div class="scroll-container">
             <button class="scroll-btn prev">&lt;</button>
@@ -115,8 +115,8 @@
             <button class="scroll-btn prevprod">&lt;</button>
             <div class="scroll-content" >
                 {% for product in products %}
-                <a href="{{ url_for('product_detail', product_id=product[0]) }}" class="product">
-                    <img src="../static/uploads/{{product[3]}}" alt="{{ product[1] }}">
+                <a href="{{ url_for('product_detail', product_id=product[0]) }}" class="product_home">
+                    <img src="../static/uploads/{{product[3]}}" alt="{{ product[1] }}" style="width: 219px;height: 230px;">
                     <span>{{product[7]|capitalize}}</span>
                     <h3>{{ product[1]|upper }}</h3>
                     <p>R{{ product[4] }}</p>
@@ -127,6 +127,7 @@
             <button class="scroll-btn nextprod">&gt;</button>
         </div>
     </section>
+
     <!--Suggesting Burner-->
     <section class="suggestions" id="contact">
         <h2>Help us grow our brand, and the brands that are featured by sending your suggestions</h2>
@@ -182,5 +183,6 @@
 
     <script src="{{ url_for('static', filename='javascript/website/home.js') }}"></script>
     <script src="{{ url_for('static', filename='javascript/website/global.js') }}"></script>
+    <script src="../../static/javascript/website/cart.js"></script>
 </body>
 </html>

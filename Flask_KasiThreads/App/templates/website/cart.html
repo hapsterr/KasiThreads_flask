@@ -6,6 +6,12 @@
     <link rel="stylesheet" href="../../../static/css/website/global.css">
     <link rel="stylesheet" href="../../../static/css/website/cart.css">
     <title>Cart</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton+SC&family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton+SC&family=Asap:ital,wght@0,100..900;1,100..900&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Oswald:wght@200..700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div onclick="closeIframe()" class="cartClose" id="cartClose">
@@ -14,15 +20,35 @@
     </div>
 
     <section class="orders">
-        <h2>Cart Products</h2>
+        {% if cart_products %}
+        <h2 class="heading">Cart Products</h2>
         <div class="cart">
-            <ul id="cart-items"></ul>
+            {% for product in cart_products %}
+            <ul class="cart-items">
+                <li>
+                    <img src="../../static/uploads/{{ product['filename'] }}" alt="Product Image">
+                    <div class="productinfo">
+                        <h2>{{ product['brand']|capitalize }}</h2>
+                        <h3>{{ product['name']|capitalize }}</h3>
+                        <h3>{{ product['size'] }}</h3>
+                        <h3>Quantity: {{ product['quantity'] }}</h3>
+                        <p>R: {{ product['price'] }}</p>
+                        <button type="button" onclick="deleteFromCart({{ product['id'] }})">Remove</button>
+                    </div>
+                </li>
+            </ul>
+            {% endfor %}
         </div>
+        <h2 class="total">Total:   R{{total}}</h2>
+        {% else %}
+            <h2 class="empty">Your Cart is empty</h2>
+        {%endif%}
     </section>
     <script>
         function closeIframe() {
             window.parent.closeIframe();
         }
     </script>
+    <script src="../../static/javascript/website/cart.js"></script>
 </body>
 </html>
