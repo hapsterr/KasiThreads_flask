@@ -8,26 +8,28 @@
     <link href="https://fonts.googleapis.com/css2?family=Jaini+Purva&family=Poetsen+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard/alert.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
     <section class="left">
         <h1>KasiThreads</h1>
-        <a href="{{url_for('home')}}">Home</a>
-        <a href="{{url_for('brands')}}">Brands</a>
-        <a href="{{url_for('home_photos')}}">Home photos</a>
-        <a href="{{url_for('products')}}">products</a>
-        <a href="{{url_for('orders')}}">orders</a>
-        <a href="{{url_for('settings')}}">settings</a>
+        <a href="{{url_for('home')}}"><i class="fa fa-home" aria-hidden="true"></i>Home</a>
+        <a href="{{url_for('brands')}}" class="disappear"><i class="fa fa-plus-square" aria-hidden="true"></i>Brands</a>
+        <a id="active" href="{{url_for('home_photos')}}" class="disappear"><i class="fa fa-long-arrow-up" aria-hidden="true"></i>Homephotos</a>
+        <a href="{{url_for('products')}}"><i class="fa fa-upload" aria-hidden="true"></i>products</a>
+        <a href="{{url_for('orders')}}"><i class="fa fa-download" aria-hidden="true"></i>orders</a>
+        <a href="{{url_for('settings')}}"><i class="fa fa-cog" aria-hidden="true"></i>settings</a>
     </section>
 
     <section class="right">
         <section class="top">
             <div class="brand_logo">
-                <img src="../static/uploads/{{brandlogo[2]}}" alt="{{user}}">
                 <h2>{{user|capitalize}}</h2>
             </div>
             <div class="header">
-                <i class="fa fa-user user" aria-hidden="true"></i>
+                <img src="../static/uploads/{{brandlogo[2]}}" alt="{{user}}">
                 <div class="logout">
                     <select name="logout" id="logout" onchange="handleLogout(event)">
                         <option value="" disabled selected></option>
@@ -54,17 +56,17 @@
         {% endwith %}
             <h2>Home Photos</h2>
             <form id="uploadForm" action="/uploadHome_photos" method="post" enctype="multipart/form-data">
-                <label for="homeLeft">Select Left Home Picture:</label>
+                <label for="homeLeft" style="color: white;">Select Left Home Picture:</label>
                 <input type="file" id="homeLeft" name="homeLeft" accept="image/*" ><br><br>
                 
 
-                <label for="homeRight_Top">Select Right Top Home Picture:</label>
+                <label for="homeRight_Top" style="color: white;">Select Right Top Home Picture:</label>
                 <input type="file" id="homeRight_Top" name="homeRight_Top" accept="image/*" ><br><br>
 
-                <label for="homeRight_Bottom">Select Right Bottom Home Picture:</label>
+                <label for="homeRight_Bottom" style="color: white;">Select Right Bottom Home Picture:</label>
                 <input type="file" id="homeRight_Bottom" name="homeRight_Bottom" accept="image/*" ><br><br>
                 
-                <button type="submit">Upload</button>
+                <button type="submit" style="height: 30px; margin: 10vh 0px; background-color: rgb(5, 255, 5);">Upload</button>
             </form>
         </section>
     </section>

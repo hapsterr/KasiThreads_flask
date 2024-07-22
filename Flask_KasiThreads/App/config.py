@@ -1,15 +1,17 @@
+from email.mime.image import MIMEImage
 import random
 import re
 import smtplib
 import ssl
 
-from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
+from flask import Flask, flash, redirect, render_template, request, session, url_for
 from models import kasithreads_db
 import bcrypt
 import os
 
 from email.message import EmailMessage
 from email.mime.text import MIMEText
+from email.mime.image import MIMEImage
 
 email_sender = 'happyseoketsa@gmail.com'
 email_password = 'sstu ypai kfrz cgio'
@@ -437,35 +439,138 @@ def cart():
             cursor.execute('SELECT * FROM products WHERE id = %s', (cart_product['productId'],))
             product = cursor.fetchone()
             if product:
-                finale_product = {
+                final_product = {
                     'id': product[0],
                     'brand': product[7],
                     'name': product[1],
                     'size': cart_product['size'],
                     'quantity': cart_product['quantity'],
-                    'price': product[4]*cart_product['quantity'],
+                    'price': product[4] * cart_product['quantity'],
                     'filename': product[3]
                 }
-                session['cart_details'].append(finale_product)
+                session['cart_details'].append(final_product)
 
         cursor.close()
-        referrer = request.referrer
-        if referrer.endswith('/cart'):
-            return redirect(url_for('cart'))
-        else:
-            return redirect(url_for('cart'))
+        return redirect(url_for('cart'))
 
-    if 'cart_details' in session:
-        cart_products = session['cart_details']
-        total = 0 
-        for cart_product in cart_products:
-            total += cart_product['price']
-    else:
-        cart_products = []
-        total = 0 
-    return render_template('website/cart.html', cart_products=cart_products, total = total)
-
+    cart_products = session.get('cart_details', [])
+    total = sum(cart_product['price'] for cart_product in cart_products)
     
+    return render_template('website/cart.html', cart_products=cart_products, total=total)
+
+@app.route('/checkout', methods=['POST', 'GET'])
+def checkout():
+    if request.method == 'POST':
+        if 'cart_details' in session:
+            product_ids = [item['id'] for item in session['cart_details']]
+            quantities = [item['quantity'] for item in session['cart_details']]
+            sizes = [item['size'] for item in session['cart_details']]
+
+            session['product_ids'] = product_ids
+            session['quantities'] = quantities
+            session['sizes'] = sizes
+            return redirect(url_for('orderdetails'))
+    return render_template('website/cart.html')  
+
+@app.route('/orderdetails', methods=['POST', 'GET'])
+def orderdetails():
+    if request.method == 'POST':
+        if 'product_ids' in session:
+            name = request.form.get('name')
+            lastname = request.form.get('lastname')
+            email = request.form.get('email')
+            cellnumber = request.form.get('cellnumber')
+            paxi_type = request.form.get('options')
+            paxi_add = request.form.get('paxiaddress')
+            order = []
+
+            cursor = db.connection.cursor()
+            for i in range(len(session['product_ids'])):
+                cursor.execute(
+                    "INSERT INTO orders (size, quantity, customer_email, paxi_add, name, lastname, paxi_type, product_id, phone_number) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                    (session['sizes'][i], session['quantities'][i], email, paxi_add, name, lastname, paxi_type, session['product_ids'][i], cellnumber)
+                )
+                cursor.execute("select * from products where id = %s",(session['product_ids'][i],) )
+                product =cursor.fetchone()
+                order.append(product)
+            db.connection.commit()
+
+
+            email_receiver = email
+            subject = "KasiThreads, Order Confirmation"
+            body = f"""
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Jaini+Purva&family=Poetsen+One&display=swap" rel="stylesheet">
+</head>
+<body>
+    <br><br>
+    <div>Hi {name} {lastname},<br><br>
+    Thank you, your Kasithreads order is being processed you will recieve communication from each brand when your products are delivered at PEP PAXI.
+        <br><br>
+     <h5 style="font-size:25px; background-color:gray">Ordered products</h5>
+"""
+            em = EmailMessage()
+# Adding order details dynamically
+            for i, product in enumerate(order):
+                image_path = f'static/uploads/{product[3]}'  # Replace with your image path
+                if os.path.exists(image_path):
+                    with open(image_path, 'rb') as img_file:
+                        img_data = img_file.read()
+                        img_name = os.path.basename(image_path)
+                        img_type = img_name.split('.')[-1]  # Extract image type dynamically
+                        cid = f'image{i + 1}'
+                        em.add_attachment(img_data, maintype='image', subtype=img_type, cid=cid)
+                        body += f"""
+                        <div style="display:flex; flex-direction:column ; border-bottom: 2px solid gray; gap:5%">
+                            <img src="cid:{cid}" alt="{product[3]}" style="width:30%;height:3%;">
+                            <div style="margin-left:10%">
+                                <h3>{product[7]}</h3>
+                                <h4 style="position:relative; bottom:40px">{product[1]}</h4>
+                                <h4 style="position:relative; bottom:40px">Quantity: {session['quantities'][i]}</h4>  
+                                <h4 style="position:relative; bottom:40px">Size: {session['sizes'][i]}<h4> 
+                                <h3 style="position:relative; bottom:40px">R{product[4]} each</h3>       
+                            </div>
+                        </div>
+                        <br>
+"""
+
+            body += """
+                <br><br>
+
+            <br>
+                KasiThreads Team.
+                </div>
+
+                <h1 style="font-weight: 800; font-family: 'Jaini Purva', system-ui; font-size: 35px;margin-top: 15px;width: auto;">KasiThreads</h1>
+                <h2>Where Local Shines</h2>
+</body>
+</html>
+"""
+
+            
+            em['From'] = email_sender
+            em['To'] = email_receiver    
+            em['Subject'] = subject
+            html_body = MIMEText(body, 'html')
+            em.attach(html_body)
+
+
+            context = ssl.create_default_context()
+            with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+                smtp.login(email_sender, email_password)
+                smtp.send_message(em)
+            
+           
+
+            # Clear the session data after processing the order
+            session.pop('product_ids', None)
+            session.pop('quantities', None)
+            session.pop('sizes', None)
+
+
+            return 'Order added'
+    return render_template('website/checkout.html')
 
 @app.route('/policies')
 def policies():
@@ -577,7 +682,7 @@ def brands():
         return redirect(url_for('home'))
 
 #Adding users into the dashboard
-@app.route('/register_user', methods=['POST'])
+@app.route('/register_user', methods=['POST','GET'])
 def register_user():
     if session.get('user_type') == 'admin':
         if request.method == 'POST':
@@ -598,10 +703,59 @@ def register_user():
                 cursor.execute("INSERT INTO brandlogo (logopath, brand_id) VALUES (%s,%s)", (filename,user_id))
                 db.connection.commit()
                 cursor.close()
-                return 'Brand successfully Added'
+
+
+                email_receiver = email
+                subject = "KasiThreads Dashboard Logins"
+                body = f"""
+<html>
+    <body>
+        <br><br>
+        <div>Dear {brandname},
+            <br><br>
+            Congradulations, your brand met KasiThreads criteria, and it is now one of the featured brands on our website.
+            <br><br>
+            Below are your login details to our dashboard, the link to the dashboard can be found on our website home page, at the footer(scroll down to the bottom, on your left click where written "Dashboard")
+            <br><br>
+            <h1> Username: {brandname}</h1>
+            <h1> Password: {password}</h1>
+            <h2> You are adviced to change your password after logging in</h2><br><br>
+            Yours Sincerely,
+            <br>
+            KasiThreads Team.
+        </div>
+
+        <h1 style ="font-weight: 800; font-family: "Jaini Purva", system-ui; font-size: 35px; margin-left: 5%; margin-top: 15px;width: auto; ">KasiThreads</h1>
+        <h2>Where Local Shines</h2>
+    </body>
+</html>
+"""
+
+                em = EmailMessage()
+                em['From'] = email_sender
+                em['To']= email_receiver
+                em['subject']= subject
+                em.set_content(MIMEText(body, 'html'))
+
+                context = ssl.create_default_context()
+
+                with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+                    smtp.login(email_sender, email_password)
+                    smtp.sendmail(email_sender, email_receiver, em.as_string())
+                
+
+
+                    flash('Brand Added, and email sent to brand owner.', 'success')
+                    return redirect(url_for('register_user'))
             else:
                 return redirect('/register_user')
-        return render_template('dashboard/brands.html')
+        cursor = db.connection.cursor()
+        cursor.execute("select * from users")
+        user_id = cursor.lastrowid
+        cursor.execute("select * from brandlogo where brand_id = %s", (user_id,))
+        brandlogo = cursor.fetchone()
+        cursor.close()
+        return render_template('dashboard/brands.html', brandlogo = brandlogo)
     else:
         return "Access denied. You must be an admin to access this page."
 
@@ -661,6 +815,7 @@ def upload():
         image = request.files['photo']
         price = request.form['Product Price']
         description = request.form['description']
+        category = request.form['category']
         type = request.form['type']
 
         sizes = request.form.getlist('size')
@@ -676,7 +831,7 @@ def upload():
             else:
                 image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             
-                cursor.execute("INSERT INTO products (name, price, description, type, sizes, filename, brand) VALUES (%s, %s, %s, %s, %s, %s, %s)", (name, price, description, type, ','.join(sizes), filename, brand))
+                cursor.execute("INSERT INTO products (name, price, description, type, sizes, filename, brand, category) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (name, price, description, type, ','.join(sizes), filename, brand, category))
                 db.connection.commit()
                 cursor.close()
                 flash('Product uploaded successfully!!!', 'success')

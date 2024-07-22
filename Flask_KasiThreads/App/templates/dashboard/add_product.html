@@ -8,70 +8,72 @@
     <link rel="stylesheet" href="../../static/css/dashboard/add_products.css">
     <link href="https://fonts.googleapis.com/css2?family=Jaini+Purva&family=Poetsen+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
     
-        <section class="left">
-            <h1>KasiThreads</h1>
-            <a href="{{url_for('home')}}">Home</a>
-            <a href="{{url_for('brands')}}">Brands</a>
-            <a href="{{url_for('home_photos')}}">Home photos</a>
-            <a href="{{url_for('products')}}">products</a>
-            <a href="{{url_for('orders')}}">orders</a>
-            <a href="{{url_for('settings')}}">settings</a>
+    <section class="left">
+        <h1>KasiThreads</h1>
+        <a href="{{url_for('home')}}"><i class="fa fa-home" aria-hidden="true"></i>Home</a>
+        <a href="{{url_for('brands')}}" class="disappear"><i class="fa fa-plus-square" aria-hidden="true"></i>Brands</a>
+        <a href="{{url_for('home_photos')}}" class="disappear"><i class="fa fa-long-arrow-up" aria-hidden="true"></i>Homephotos</a>
+        <a id="active" href="{{url_for('products')}}"><i class="fa fa-upload" aria-hidden="true"></i>products</a>
+        <a href="{{url_for('orders')}}"><i class="fa fa-download" aria-hidden="true"></i>orders</a>
+        <a href="{{url_for('settings')}}"><i class="fa fa-cog" aria-hidden="true"></i>settings</a>
+    </section>
+
+    <section class="right">
+        <section class="top">
+            <div class="brand_logo">
+                <h2>{{user|capitalize}}</h2>
+            </div>
+            <div class="header">
+                <img src="../static/uploads/{{brandlogo[2]}}" alt="{{user}}">
+                <div class="logout">
+                    <select name="logout" id="logout" onchange="handleLogout(event)">
+                        <option value="" disabled selected></option>
+                        <option value="logout">Logout</option>
+                    </select>
+                </div>
+            </div>
         </section>
     
-        <section class="right">
-            <section class="top">
-                <div class="brand_logo">
-                    <img src="../static/uploads/{{brandlogo[2]}}" alt="{{user}}">
-                    <h2>{{user|capitalize}}</h2>
-                </div>
-                <div class="header">
-                    <i class="fa fa-user user" aria-hidden="true"></i>
-                    <div class="logout">
-                        <select name="logout" id="logout" onchange="handleLogout(event)">
-                            <option value="" disabled selected></option>
-                            <option value="logout">Logout</option>
-                        </select>
-                    </div>
-                </div>
-            </section>
-    
             <section class="bottom">
-                <h2>Add Product</h2>
-                <h2>Products that you add will be classified as {{user}} products, and {{user}} will be held acountable for each product.</h2>
+                <h2>Any products you add will be classified as {{user}} products, and {{user}} will be responsible for any complaints related to these products.</h2>
                 <form action="/upload" method="post" enctype="multipart/form-data">
-                    <label for="photo">Upload Photo:</label>
+                    <label for="photo" style="color: white;">Upload Photo:</label>
                     <input type="file" name="photo" accept="image/*" required><br><br>
 
-                    <label for="name">Product Name:</label>
+                    <label for="name" style="color: white;">Product Name:</label>
                     <input type="text" name="Product Name" placeholder="Product name" maxlength="15"  required><br><br>
 
-                    <label for="price">R:</label>
+                    <label for="price" style="color: white;">R:</label>
                     <input type="number"  name="Product Price" placeholder="Product Price" step="1" min="50" required><br><br>
 
-                    <label for="gender">Product for Males/Females:</label>
-                    <select id="gender" name="gender" required>
-                    <option value="male">Males</option>
-                    <option value="female">Females</option>
+                    <label for="category" style="color: white;">Product category:</label>
+                    <select id="category" name="category" required>
+                        <option value="" disabled selected>Select category</option>
+                        <option value="maletshirt">Male T-shirt</option>
+                        <option value="femaletshirt">Female T-shirt</option>
                     </select><br><br>
 
-                    <label for="type">Product Type:</label>
+                    <label for="type" style="color: white;">Product Type:</label>
                     <select id="type" name="type" onchange="updateSizeOptions()" required>
                         <option value="" disabled selected>Select Type</option>
                         <option value="shoes">Shoes</option>
                         <option value="clothing">Clothing</option>
                     </select><br><br>
-                    <label for="size">Product Size:</label>
-                    <div id="size" required>
+                    <label for="size" style="color: white;">Product Size:</label>
+                    <div id="size" style="color: white;" required>
                         <!-- Size checkboxes will be populated dynamically -->
                     </div><br><br>
 
-                    <label for="description">Product Description:</label>
-                    <textarea type="text" name="description" placeholder="Product Description" required></textarea><br><br>
+                    <label for="description" style="color: white; position: relative; bottom: 9vh ;">Product Description:</label>
+                    <textarea type="text" name="description" placeholder="Product Description (max 40 characters)" required style="height: 10vh;" maxlength="40"></textarea><br><br>
 
-                    <button type="submit">Upload</button>
+                    <button type="submit" style="color: black; background-color: rgb(1, 231, 1); position: relative; height: 30px; margin-bottom: 10vh;">Upload</button>
                 </form>
             </section>
         </section>

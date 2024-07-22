@@ -1,0 +1,9 @@
+clear the customer local storage after the order is placed
+
+
+<script>
+        // Clear local storage on page load
+        window.onload = function() {
+            localStorage.clear();
+        };
+    </script>

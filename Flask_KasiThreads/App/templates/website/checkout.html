@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>checkout</title>
+</head>
+<body>
+    <form action="/orderdetails" method="POST">
+        <h2>Personal Information</h2><hr>
+        <div>
+            <input type="text" name="name" placeholder="Name" required>
+            <input type="text" name="lastname" placeholder="Surname" required>
+        </div>
+        <div>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="cellnumber" name="cellnumber" placeholder="Phone Number" required>
+        </div>
+        
+        <h2>Delivery Option</h2>
+        <h3>Note: Your order might arrive in separate deliveries.</h3>
+        <input type="radio" id="option1" name="options" value="option1" required>
+        <label for="option1">Paxi 7-9 Days (free)</label><br>
+
+        <input type="radio" id="option2" name="options" value="option2" required>
+        <label for="option2">Paxi 3-5days (5% of the total will be added)</label><br>
+
+        <label for="address">Paxi Address/Paxi point code</label>
+        <input type="paxi address" name="paxiaddress" required><br>
+
+
+        <button type="submit">Continue</button>
+    </form>
+
+</body>
+</html>

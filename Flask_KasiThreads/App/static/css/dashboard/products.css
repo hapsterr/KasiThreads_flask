@@ -5,8 +5,36 @@
     padding-bottom: 5vh;
     border-bottom: 1px solid gray;
 }
-
+.product p{
+    color: white;
+}
+.product h2{
+    font-size: 20px;
+    position: relative;
+    top: 10px;
+}
 .product img{
     position: relative;
     top: 5vh;
+}
+.product button{
+    background-color: red;
+    width: 90px;
+    height: 40px;
+    font-size: 20px;
+}
+
+.bottom h3 a{
+    color: aqua;
+}
+.bottom h3 a:hover{
+    color: blue;
+}
+.bottom h3{
+    color: white;
+    font-size: 20px;
+}
+
+.bottom label{
+    color: white;
 }

@@ -42,14 +42,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Event listener for previous button
     prevBtn.addEventListener('click', function(){
-        scrollbrands.scrollLeft -= 150;
+        scrollbrands.scrollLeft -= 190;
     });
 
     nextBtn.addEventListener('click', function() {
-        scrollbrands.scrollLeft += 150;
+        scrollbrands.scrollLeft += 190;
     });
     setInterval(function() {
-        scrollbrands.scrollLeft += 150;
+        scrollbrands.scrollLeft += 190;
     }, 10000);
    
 });

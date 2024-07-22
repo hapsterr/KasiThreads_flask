@@ -22,26 +22,33 @@
     <section class="orders">
         {% if cart_products %}
         <h2 class="heading">Cart Products</h2>
-        <div class="cart">
-            {% for product in cart_products %}
-            <ul class="cart-items">
-                <li>
-                    <img src="../../static/uploads/{{ product['filename'] }}" alt="Product Image">
-                    <div class="productinfo">
-                        <h2>{{ product['brand']|capitalize }}</h2>
-                        <h3>{{ product['name']|capitalize }}</h3>
-                        <h3>{{ product['size'] }}</h3>
-                        <h3>Quantity: {{ product['quantity'] }}</h3>
-                        <p>R: {{ product['price'] }}</p>
-                        <button type="button" onclick="deleteFromCart({{ product['id'] }})">Remove</button>
-                    </div>
-                </li>
-            </ul>
-            {% endfor %}
-        </div>
-        <h2 class="total">Total:   R{{total}}</h2>
+        <form action="/checkout" target="_blank" method="post">
+            <div class="cart">
+                {% for product in cart_products %}
+                    <ul class="cart-items">
+                        <li>
+                            <img src="../../static/uploads/{{ product['filename'] }}" alt="Product Image">
+                            <div class="productinfo">
+                                <h2>{{ product['brand']|capitalize }}</h2>
+                                <h3>{{ product['name']|capitalize }}</h3>
+                                <h3>{{ product['size'] }}</h3>
+                                <h3>Quantity: {{ product['quantity'] }}</h3>
+                                <p>R: {{ product['price'] }}</p>
+                                <button type="button" onclick="deleteFromCart({{ product['id'] }})">Remove</button>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <input type="hidden" name="product_id" value="{{product['id']}}">
+                    <input type="hidden" name="quantity" value="{{product['quantity']}}">
+                    <input type="hidden" name="size" value="{{product['size']}}">
+                {% endfor %}
+            </div>
+            <h2 class="total">Total:   R{{total}}</h2>
+            <button type="submit">Checkout</button>
         {% else %}
-            <h2 class="empty">Your Cart is empty</h2>
+        <h2 class="empty">Your Cart is empty</h2>
+        </form>
         {%endif%}
     </section>
     <script>
