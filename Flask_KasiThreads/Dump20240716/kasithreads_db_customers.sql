@@ -16,30 +16,33 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `brandlogo`
+-- Table structure for table `customers`
 --
 
-DROP TABLE IF EXISTS `brandlogo`;
+DROP TABLE IF EXISTS `customers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `brandlogo` (
-  `logo_id` int NOT NULL AUTO_INCREMENT,
-  `brand_id` int DEFAULT NULL,
-  `logopath` varchar(255) NOT NULL,
-  PRIMARY KEY (`logo_id`),
-  KEY `brand_id` (`brand_id`),
-  CONSTRAINT `brandlogo_ibfk_1` FOREIGN KEY (`brand_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `customers` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `phone_number` varchar(10) NOT NULL,
+  `password_hash` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `brandlogo`
+-- Dumping data for table `customers`
 --
 
-LOCK TABLES `brandlogo` WRITE;
-/*!40000 ALTER TABLE `brandlogo` DISABLE KEYS */;
-INSERT INTO `brandlogo` VALUES (13,29,'favicon.ico'),(14,31,'static-image.jpg'),(15,33,'0x0.webp'),(16,34,'0x0.webp');
-/*!40000 ALTER TABLE `brandlogo` ENABLE KEYS */;
+LOCK TABLES `customers` WRITE;
+/*!40000 ALTER TABLE `customers` DISABLE KEYS */;
+INSERT INTO `customers` VALUES (2,'Happy','SEOKETSA','happyseoketsa@gmail.com','0646148836','$2b$12$LSOcOPAgS9uI0jmPjk2tOuxrSHM95MblDKMxutlnuTu5gq9HoGSKa','2024-07-12 07:56:41'),(6,'Happy','Seoketsa','kasithreads31@gmail.com','0646148836','$2b$12$MOEcFjsMCohD.LImXKLHUONkhKy372IF90rSftYNUjDrRa785umZS','2024-07-14 20:57:29');
+/*!40000 ALTER TABLE `customers` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -51,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-07-22 12:38:32
+-- Dump completed on 2024-07-16 12:53:13
