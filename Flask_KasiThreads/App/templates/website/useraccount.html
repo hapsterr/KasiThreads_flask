@@ -64,9 +64,27 @@
     <section>
         <div>{{name}} {{lastname}} ACCOUNT</div>
         <a href="{{url_for('website_logout')}}"><i class="fa fa-user user" aria-hidden="true"></i>LOGOUT</a>
-        <div>ORDER HISTORY WILL APPEAR HERE</div>
     </section>
+    
 
+    <section>
+
+        {% if orders %}
+        {% for order in orders %}
+        <div class="order-panel" onclick="viewOrderDetails('{{ order.id }}')">
+            <p><strong>Order Number:</strong> {{ order[0] }}</p>
+            <p><strong>Total Price:</strong> R{{ order[] }}</p>
+            <p><strong>Date Purchased:</strong> {{ order.date_purchased }}</p>
+            <p><strong>Delivery Status:</strong> {{ order.delivery_status }}</p>
+        </div>
+        {% endfor %}
+
+        
+        {%else%}
+            <div>ORDER HISTORY WILL APPEAR HERE</div>
+        {%endif%}
+           
+    </section>
     
 
 

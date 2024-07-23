@@ -1,4 +1,3 @@
-from email.mime.image import MIMEImage
 import random
 import re
 import smtplib
@@ -12,6 +11,11 @@ import os
 from email.message import EmailMessage
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
+
+import random
+import string
+
+
 
 email_sender = 'happyseoketsa@gmail.com'
 email_password = 'sstu ypai kfrz cgio'
@@ -180,7 +184,12 @@ def account():
 def useraccount():
     name = session.get('customer_name')
     lastname = session.get('customer_lastname')
-    return render_template('website/useraccount.html', name =name , lastname=lastname)
+    cursor = db.connection.cursor()
+    cursor.execute('select * from orders where customer_id =%s',(session.get('customer_id'),))
+    order = cursor.fetchall()
+    
+   #if order 
+    return render_template('website/useraccount.html', name =name , lastname=lastname,  orders =order)
 
 #customer lockout
 @app.route('/website_logout')
@@ -474,104 +483,110 @@ def checkout():
 
 @app.route('/orderdetails', methods=['POST', 'GET'])
 def orderdetails():
-    if request.method == 'POST':
-        if 'product_ids' in session:
-            name = request.form.get('name')
-            lastname = request.form.get('lastname')
-            email = request.form.get('email')
-            cellnumber = request.form.get('cellnumber')
-            paxi_type = request.form.get('options')
-            paxi_add = request.form.get('paxiaddress')
-            order = []
+    if "customer_name" in session: #if customer is logged in
+        if request.method == 'POST':
+            if 'product_ids' in session:
+                paxi_type = request.form.get('options')
+                paxi_add = request.form.get('paxiaddress')
+                order = []
 
-            cursor = db.connection.cursor()
-            for i in range(len(session['product_ids'])):
-                cursor.execute(
-                    "INSERT INTO orders (size, quantity, customer_email, paxi_add, name, lastname, paxi_type, product_id, phone_number) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                    (session['sizes'][i], session['quantities'][i], email, paxi_add, name, lastname, paxi_type, session['product_ids'][i], cellnumber)
-                )
-                cursor.execute("select * from products where id = %s",(session['product_ids'][i],) )
-                product =cursor.fetchone()
-                order.append(product)
-            db.connection.commit()
+                cursor = db.connection.cursor()
+                cursor.execute('select * from customers where first_name=%s' , (session.get('customer_name'),)) 
+                customer_info = cursor.fetchone()
+                
+                random_numbers = ''.join(random.choices(string.digits, k=4))# Generate a random 4-digit number
+                random_alphabet = random.choice(string.ascii_uppercase)# Generate a random alphabet
+                ordernumber_components =  [random_numbers + random_alphabet + customer_info[1][0]+ customer_info[2][0]]    
+                ordernumber = ''.join(ordernumber_components) #creating order number
+                
+                #check if the order number exist 
+                while cursor.execute("select * from orders where order_number = %s",(ordernumber,)):
+                    random_numbers = ''.join(random.choices(string.digits, k=4))# Generate a random 4-digit number
+                    random_alphabet = random.choice(string.ascii_uppercase)# Generate a random alphabet
+                    ordernumber_components =  [random_numbers + random_alphabet + customer_info[1][0]+ customer_info[2][0]]    
+                    ordernumber = ''.join(ordernumber_components) #creating order number
+                for i in range(len(session['product_ids'])):
+                    cursor.execute(
+                        "INSERT INTO orders (size, quantity, customer_id, customer_email, paxi_add, name, lastname, paxi_type, product_id, phone_number, order_number) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                        (session['sizes'][i], session['quantities'][i], customer_info[0], customer_info[3], paxi_add, customer_info[1], customer_info[2], paxi_type, session['product_ids'][i], customer_info[4], ordernumber)
+                    )
+                    cursor.execute("SELECT * FROM products WHERE id = %s", (session['product_ids'][i],))
+                    product = cursor.fetchone()
+                    order.append(product)
+                db.connection.commit()
 
-
-            email_receiver = email
-            subject = "KasiThreads, Order Confirmation"
-            body = f"""
+                email_receiver = customer_info[3]
+                subject = "KasiThreads, Order Confirmation"
+                body = f"""
 <html>
 <head>
     <link href="https://fonts.googleapis.com/css2?family=Jaini+Purva&family=Poetsen+One&display=swap" rel="stylesheet">
 </head>
 <body>
     <br><br>
-    <div>Hi {name} {lastname},<br><br>
-    Thank you, your Kasithreads order is being processed you will recieve communication from each brand when your products are delivered at PEP PAXI.
-        <br><br>
-     <h5 style="font-size:25px; background-color:gray">Ordered products</h5>
+    <div>Hi {customer_info[1]} {customer_info[2]},<br><br>
+    Thank you, your Kasithreads order is being processed. You will receive communication from each brand when your products are delivered at PEP PAXI.
+    <br><br>
+    <h5 style="font-size:25px; background-color:gray">Ordered products</h5>
 """
-            em = EmailMessage()
-# Adding order details dynamically
-            for i, product in enumerate(order):
-                image_path = f'static/uploads/{product[3]}'  # Replace with your image path
-                if os.path.exists(image_path):
-                    with open(image_path, 'rb') as img_file:
-                        img_data = img_file.read()
-                        img_name = os.path.basename(image_path)
-                        img_type = img_name.split('.')[-1]  # Extract image type dynamically
-                        cid = f'image{i + 1}'
-                        em.add_attachment(img_data, maintype='image', subtype=img_type, cid=cid)
-                        body += f"""
-                        <div style="display:flex; flex-direction:column ; border-bottom: 2px solid gray; gap:5%">
-                            <img src="cid:{cid}" alt="{product[3]}" style="width:30%;height:3%;">
-                            <div style="margin-left:10%">
-                                <h3>{product[7]}</h3>
-                                <h4 style="position:relative; bottom:40px">{product[1]}</h4>
-                                <h4 style="position:relative; bottom:40px">Quantity: {session['quantities'][i]}</h4>  
-                                <h4 style="position:relative; bottom:40px">Size: {session['sizes'][i]}<h4> 
-                                <h3 style="position:relative; bottom:40px">R{product[4]} each</h3>       
+                em = EmailMessage()
+                # Adding order details dynamically
+                for i, product in enumerate(order):
+                    print(order)
+                    image_path = f'static/uploads/{product[3]}'  # Replace with your image path
+                    print(image_path + product[3])
+                    if os.path.exists(image_path):
+                        with open(image_path, 'rb') as img_file:
+                            img_data = img_file.read()
+                            img_name = os.path.basename(image_path)
+                            img_type = img_name.split('.')[-1]  # Extract image type dynamically
+                            cid = f'image{i + 1}'
+                            em.add_attachment(img_data, maintype='image', subtype=img_type, cid=cid)
+                            body += f"""
+                            <h2>fjytgiyrfiyt</h2>
+                            <div style="display:flex; flex-direction:column; border-bottom: 2px solid gray; gap:5%;">
+                                <img src="cid:{cid}" alt="{product[3]}" style="width:30%; height:3%;">
+                                <div style="margin-left:10%;">
+                                    <h3>{product[7]}</h3>
+                                    <h4 style="position:relative; bottom:40px">{product[1]}</h4>
+                                    <h4 style="position:relative; bottom:40px">Quantity: {session['quantities'][i]}</h4>
+                                    <h4 style="position:relative; bottom:40px">Size: {session['sizes'][i]}</h4>
+                                    <h3 style="position:relative; bottom:40px">R{product[4]} each</h3>
+                                </div>
                             </div>
-                        </div>
-                        <br>
+                            <br>
 """
-
-            body += """
+                
+                body += """
                 <br><br>
-
-            <br>
                 KasiThreads Team.
                 </div>
-
-                <h1 style="font-weight: 800; font-family: 'Jaini Purva', system-ui; font-size: 35px;margin-top: 15px;width: auto;">KasiThreads</h1>
+                <h1 style="font-weight: 800; font-family: 'Jaini Purva', system-ui; font-size: 35px; margin-top: 15px; width: auto;">KasiThreads</h1>
                 <h2>Where Local Shines</h2>
 </body>
 </html>
 """
 
-            
-            em['From'] = email_sender
-            em['To'] = email_receiver    
-            em['Subject'] = subject
-            html_body = MIMEText(body, 'html')
-            em.attach(html_body)
+                em.set_content(body, subtype='html')
+                em['From'] = email_sender
+                em['To'] = email_receiver    
+                em['Subject'] = subject
 
+                context = ssl.create_default_context()
+                with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+                    smtp.login(email_sender, email_password)
+                    smtp.send_message(em)
 
-            context = ssl.create_default_context()
-            with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
-                smtp.login(email_sender, email_password)
-                smtp.send_message(em)
-            
-           
+                # Clear the session data after processing the order
+                session.pop('product_ids', None)
+                session.pop('quantities', None)
+                session.pop('sizes', None)
 
-            # Clear the session data after processing the order
-            session.pop('product_ids', None)
-            session.pop('quantities', None)
-            session.pop('sizes', None)
-
-
-            return 'Order added'
-    return render_template('website/checkout.html')
-
+                return 'Order added'
+        return render_template('website/checkout.html')
+    else:
+        return redirect(url_for("account"))
+    
 @app.route('/policies')
 def policies():
     return render_template('website/policies.html')
